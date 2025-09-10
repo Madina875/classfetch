@@ -18,8 +18,11 @@ const ProductsView = ({ data, handleDelete, handleUpdate }) => {
               >
                 delete
               </button>
-              onClick={() => handleUpdate(data)}
-              <button className="text-black rounded-[10px] hover:bg-gray-300 w-[100px] h-[30px] border">
+
+              <button
+                onClick={() => handleUpdate(e)}
+                className="text-black rounded-[10px] hover:bg-gray-300 w-[100px] h-[30px] border"
+              >
                 update
               </button>
             </div>
