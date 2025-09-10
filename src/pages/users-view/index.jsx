@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 
-const UsersView = ({ data, handleDelete }) => {
+const UsersView = ({ data, handleDelete, handleUpdate }) => {
   console.log(data);
   return (
     <div className="w-[70%] bg-gray-200 rounded-2xl grid grid-cols-3 gap-[30px]">
@@ -19,7 +19,10 @@ const UsersView = ({ data, handleDelete }) => {
               >
                 delete
               </button>
-              <button className="text-black rounded-[10px] hover:bg-gray-300 w-[100px] h-[30px] border">
+              <button
+                onClick={() => handleUpdate(e)}
+                className="text-black rounded-[10px] hover:bg-gray-300 w-[100px] h-[30px] border"
+              >
                 update
               </button>
             </div>

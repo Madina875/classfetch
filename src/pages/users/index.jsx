@@ -1,21 +1,40 @@
-import React, { memo, useState } from "react";
+import React, { memo, use, useState } from "react";
 import UsersView from "../users-view";
 
 const Users = () => {
   const [data, setData] = useState([]);
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
+  const [isEdit, setEdit] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const user = {
-      id: Date.now(),
-      name,
-      age,
-    };
-    setData((prev) => [...prev, user]);
-    setAge("");
-    setName("");
+
+    if (isEdit) {
+      const editedData = data.map((user) =>
+        user.id === isEdit.id ? { id: isEdit.id, name, age } : user
+      );
+      setData(editedData);
+      setName("");
+      setAge("");
+      setEdit(null);
+    } else {
+      const user = {
+        id: Date.now(),
+        name,
+        age,
+      };
+      setData((prev) => [...prev, user]);
+      setAge("");
+      setName("");
+    }
+  };
+
+  const handleUpdate = (user) => {
+    console.log(user);
+    setName(user.name);
+    setAge(user.age);
+    setEdit(user);
   };
 
   const handleDelete = (id) => {
@@ -45,7 +64,11 @@ const Users = () => {
           submit
         </button>
       </form>
-      <UsersView data={data} handleDelete={handleDelete} />
+      <UsersView
+        data={data}
+        handleDelete={handleDelete}
+        handleUpdate={handleUpdate}
+      />
     </div>
   );
 };
