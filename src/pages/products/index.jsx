@@ -1,54 +1,89 @@
-import React, { memo, useState } from "react";
+import React, { Component, memo, useState } from "react";
 import ProductsView from "../products-view";
 
-const Products = () => {
-  const [data, setData] = useState([]);
-  const [title, setTitle] = useState("");
-  const [price, setPrice] = useState("");
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const product = {
-      id: Date.now(),
-      title,
-      price,
+export default class Products extends Component {
+  constructor() {
+    super();
+    this.state = {
+      title: "",
+      price: "",
+      data: [],
+      editingItem: null,
     };
-    setData((prev) => [...prev, product]);
-    setPrice("");
-    setTitle("");
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    const { data, title, price, editingItem } = this.state;
+    // if (Number(age) < 0) {
+    //   return alert("xato");
+    // }
+
+    if (editingItem) {
+      const editedData = data.map((product) =>
+        product.id === editingItem.id
+          ? { id: editingItem.id, title, price }
+          : product
+      );
+      this.setState({
+        data: editedData,
+        title: "",
+        price: "",
+        editingItem: null,
+      });
+    } else {
+      const product = {
+        id: Date.now(),
+        title,
+        price: Number(price),
+      };
+      this.setState({ data: [...data, product], title: "", price: "" });
+    }
   };
 
-  const handleDelete = (id) => {
-    setData((prev) => prev.filter((i) => i.id !== id));
+  handleDelete = (id) => {
+    this.setState({
+      data: this.state.data.filter((product) => product.id !== id),
+    });
   };
 
-  return (
-    <div className="flex justify-between relative">
-      <form
-        onSubmit={handleSubmit}
-        className="flex-col w-[25%] h-[400px] flex place-items-center justify-center bg-gray-200 rounded-2xl gap-[20px]"
-      >
-        <input
-          className="w-[80%] h-[10%] bg-white rounded-[5px] indent-4  hover:outline-gray-200 focus:outline-gray-200"
-          type="text"
-          placeholder="title..."
-          onChange={(e) => setTitle(e.target.value)}
-          value={title}
-        />
-        <input
-          type="number"
-          placeholder="age..."
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-          className="w-[80%] h-[10%] bg-white rounded-[5px] indent-4  hover:outline-gray-200 focus:outline-gray-200"
-        />
-        <button className="w-[80%] h-[10%] bg-white rounded-[5px] hover:bg-gray-300 italic">
-          submit
-        </button>
-      </form>
-      <ProductsView data={data} handleDelete={handleDelete} />
-    </div>
-  );
-};
+  handleUpdate = (product) => {
+    console.log(product);
+    this.setState({
+      title: product.title,
+      price: product.price,
+      editingItem: product,
+    });
+  };
 
-export default memo(Products);
+  render() {
+    const { title, price, data, editingItem } = this.state;
+    return (
+      <div className="flex justify-between relative">
+        <form
+          onSubmit={this.handleSubmit}
+          className="flex-col w-[25%] h-[400px] flex place-items-center justify-center bg-gray-200 rounded-2xl gap-[20px]"
+        >
+          <input
+            className="w-[80%] h-[10%] bg-white rounded-[5px] indent-4  hover:outline-gray-200 focus:outline-gray-200"
+            type="text"
+            placeholder="title..."
+            onChange={(e) => this.setState({ title: e.target.value })}
+            value={title}
+          />
+          <input
+            type="number"
+            placeholder="age..."
+            value={price}
+            onChange={(e) => this.setState({ price: e.target.value })}
+            className="w-[80%] h-[10%] bg-white rounded-[5px] indent-4  hover:outline-gray-200 focus:outline-gray-200"
+          />
+          <button className="w-[80%] h-[10%] bg-white rounded-[5px] hover:bg-gray-300 italic">
+            submit
+          </button>
+        </form>
+        <ProductsView data={data} handleDelete={this.handleDelete} />
+      </div>
+    );
+  }
+}
