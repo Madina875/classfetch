@@ -82,7 +82,11 @@ export default class Products extends Component {
             submit
           </button>
         </form>
-        <ProductsView data={data} handleDelete={this.handleDelete} />
+        <ProductsView
+          data={data}
+          handleDelete={this.handleDelete}
+          handleUpdate={this.handleUpdate}
+        />
       </div>
     );
   }
