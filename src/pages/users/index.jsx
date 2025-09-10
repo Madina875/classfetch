@@ -16,9 +16,11 @@ const Users = () => {
     setData((prev) => [...prev, user]);
     setAge("");
     setName("");
-    console.log(user);
   };
 
+  const handleDelete = (id) => {
+    setData((prev) => prev.filter((i) => i.id !== id));
+  };
   return (
     <div className="flex justify-between relative">
       <form
@@ -43,7 +45,7 @@ const Users = () => {
           submit
         </button>
       </form>
-      <UsersView data={data} />
+      <UsersView data={data} handleDelete={handleDelete} />
     </div>
   );
 };
